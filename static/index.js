@@ -18,6 +18,7 @@ function createUser(e){
       response.json().then(data => {
         if (data.message === 'Success'){
           formElement.reset();
+          getUsers()
           return notifier({'message': "User was created! Hooray!"})
         } else {
           return notifier(data);
@@ -59,6 +60,7 @@ function getUsers(){
 
 function populateTable(users){
   let tbody = document.querySelector('tbody');
+  tbody.innerHTML = '';
   users.forEach(user => {
     let tr = document.createElement('tr');
     let th = document.createElement('th');
@@ -92,7 +94,6 @@ function populateTable(users){
   btns.forEach(btn => btn.onclick = handleDelete);
 }
 
-
 function handleDelete(e){
   let tr = e.target.closest('tr');
   let id = tr.firstElementChild.textContent;
@@ -107,7 +108,6 @@ function handleDelete(e){
   }).then(response => {
     if (response.ok){ 
       response.json().then(data => {
-        console.log(data);
         if (data.message === 'Success'){
           tr.remove()
           return notifier({'message': "User was deleted!"});

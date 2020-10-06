@@ -15,9 +15,33 @@ def home():
     return render_template('home.html')
 
 # User profile page
-@app.route('/profile')
+@app.route('/profile/')
 def profile():
     return render_template('profile.html')
+
+####################
+# Utils #
+####################
+
+def user_data_validators(data, username):
+    first_name = data.get('firstName', '')
+    last_name = data.get('lastName', '')
+
+    # small validation section
+    if len(username) > 16 or len(username) < 4:
+        return "Username must be 4-16 characters long"
+    if len(first_name) > 16:
+        return "First name must be 4-16 characters long"
+    if len(last_name) > 16:
+        return "Last name must be 4-16 characters long"
+
+    new_user = {
+        'username': username, 
+        'first_name': first_name,
+        'last_name': last_name,
+    }
+
+    return new_user
 
 #####################
 # REST APIs #
@@ -32,24 +56,13 @@ def create_user():
             username = data['username']
         except KeyError:
             return jsonify({"message": "Username is required"}) 
-        first_name = data.get('firstName', '')
-        last_name = data.get('lastName', '')
 
-        # small validation section
-        if len(username) > 16 or len(username) < 4:
-            return jsonify({"message": "Username must be 4-16 characters long"})
-        if len(first_name) > 16:
-            return jsonify({"message": "First name must be 4-16 characters long"})
-        if len(last_name) > 16:
-            return jsonify({"message": "Last name must be 4-16 characters long"})
+        validation_result = user_data_validators(data, username)
+        if type(validation_result) == str:
+            return jsonify({"message": validation_result})
 
-        new_user = {
-            'username': username, 
-            'first_name': first_name,
-            'last_name': last_name,
-        }
         database = UserHandler()
-        result = database.add_user(new_user)
+        result = database.add_user(validation_result)
         
         return jsonify({"message": result})
 
@@ -81,12 +94,33 @@ def delete_user():
         return jsonify({"message": "Wrong content-type"})
 
 # Getting user by an id
-@app.route('/api/user', methods=['GET'])
-def get_user():
-    pass
+@app.route('/api/user/<int:user_id>/', methods=['GET'])
+def get_user(user_id):
+    database = UserHandler()
+    result = database.get_user(user_id)
+    return jsonify(result) if type(result) == dict else jsonify({"message": result})
 
 # Editing user by an id
-@app.route('/api/profile', methods=['UPDATE'])
+@app.route('/api/profile/', methods=['PUT'])
 def edit_user():
-    pass
+    if request.is_json:
+        data = request.get_json()
+        try:
+            username = data['username']
+            user_id = int(data['id'])
+        except (KeyError, ValueError): 
+            return jsonify({"message": "numeric ID and username are required"})
 
+        validation_result = user_data_validators(data, username)
+        if type(validation_result) == str:
+            return jsonify({"message": validation_result})
+
+        validation_result.update({'id': user_id})
+        
+        database = UserHandler()
+        result = database.update_user(user_id, validation_result)
+        
+        return jsonify({"message": result})
+
+    else:
+        return jsonify({"message": "Wrong content-type"})

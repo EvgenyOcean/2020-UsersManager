@@ -1,5 +1,99 @@
 {% extends 'base.html' %}
 
 {% block content %}
-Hello from profile page
+<form action="" id="user-updating-form">
+  <div class="form-group">
+    <label for="usernameInput">Username</label>
+    <input type="text" class="form-control" name="username" id="usernameInput" required>
+  </div>
+  <div class="form-group">
+    <label for="firstName">First Name</label>
+    <input type="text" class="form-control" name="firstName" id="firstName">
+  </div>
+  <div class="form-group">
+    <label for="lastName">Last Name</label>
+    <input type="text" class="form-control" name="lastName" id="lastName">
+  </div>
+
+  <button type="submit" class="btn btn-primary">Update</button>
+</form>
+
+<script>
+  let keepAsking = true;
+  while (keepAsking) {
+    let userId = prompt('Enter user ID or type HOME to get back to the home page');
+    if (userId === 'HOME'){
+      keepAsking = false;
+      window.location.href = '/';
+    } else if (+userId){
+      keepAsking = false;
+      let id = +userId
+      fetch(`/api/user/${id}`).then(response => {
+        if (response.ok){ 
+          response.json().then(data => {
+            if (data.message){
+              return notifier(data);
+            } else {
+              updateForm(data)
+              return notifier({'message': "User was found!!"});
+            }
+          }).catch(err => {console.log(err)})
+        } else {
+          response.json().then(errData => { 
+            console.log(errData);
+          }).catch(err => {console.log(err)})
+        }
+      }).catch(err => {console.log(err)});
+    }
+  }
+
+  function updateForm({first_name, id, last_name, username}){
+    let form = document.querySelector('#user-updating-form');
+    let usernameEl = document.querySelector('[name="username"]');
+    let firstNameEl = document.querySelector('[name="firstName"]');
+    let lastNameEl = document.querySelector('[name="lastName"]');
+    let submitEl = document.querySelector('[type="submit"]');
+
+    usernameEl.value = username;
+    firstNameEl.value = first_name;
+    lastNameEl.value = last_name;
+    submitEl.id = id;
+    
+    form.onsubmit = handleUserUpdate;
+  }
+
+  function handleUserUpdate(e){
+    e.preventDefault();
+    let submitEl = document.querySelector('[type="submit"]');
+    let formEl = e.target;
+    let id = submitEl.id;
+
+    let form = new FormData(formEl);
+    let username = form.get('username');
+    let firstName = form.get('firstName');
+    let lastName = form.get('lastName');
+
+    fetch(`/api/profile/`, {
+      method: "PUT",
+      headers: {
+        'HTTP_X_REQUESTED_WITH': 'XMLHttpRequest',
+        'X-Requested-With': 'XMLHttpRequest',
+        "Content-Type": "application/json",
+      }, 
+      body: JSON.stringify({username, firstName, lastName, id}),
+    }).then(response => {
+        if (response.ok){ 
+          response.json().then(data => {
+            return notifier(data);
+          }).catch(err => {console.log(err)})
+        } else {
+          response.json().then(errData => { 
+            console.log(errData);
+          }).catch(err => {console.log(err)})
+        }
+    }).catch(err => {console.log(err)});
+  }
+
+
+</script>
 {% endblock %}

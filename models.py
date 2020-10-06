@@ -39,14 +39,19 @@ class UserHandler:
         self.write_json(data)
         return 'Success'
 
-    def change_user(self, id, new_user):
+    def update_user(self, id, new_user):
         data = self.read_json()
+        for user in data[0]:
+            if user['username'] == new_user['username'] and user['id'] != new_user['id']:
+                return 'That username already exists' 
+
         for user in data[0]:
             if user['id'] == id:
                 user['username'] = new_user['username']
-                user['age'] = new_user['age']
+                user['first_name'] = new_user['first_name']
+                user['last_name'] = new_user['last_name']
         self.write_json(data)
-        return 'User\'s profile has been updated'
+        return 'Success'
 
     def get_user(self, id):
         data = self.read_json()
