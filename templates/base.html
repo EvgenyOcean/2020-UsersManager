@@ -8,26 +8,21 @@
   <title>trueConfTask</title>
 </head>
 <body>
-  <nav class="navbar navbar-expand-md navbar-dark bg-success">
+  <nav class="navbar navbar-expand-md navbar-dark bg-success mb-4">
     <div class="container">
       <a class="navbar-brand mr-4" href="{{url_for('home')}}">TrueConfTest</a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#datanav" aria-controls="datanav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse pt-1" id="datanav">
-        <div class="navbar-nav ml-auto">
-          <a class="nav-item nav-link" href="{{ url_for('users') }}">Users</a>
-          <a class="nav-item nav-link" href="{{ url_for('profile') }}">Profile</a>
-        </div>
+      <div class="navbar-nav ml-auto">
+        <a class="nav-item nav-link" href="{{ url_for('home') }}">Home</a>
+        <a class="nav-item nav-link" href="{{ url_for('profile') }}">Profile</a>
       </div>
     </div>
   </nav>
-  <div class="container">
-    {% block content %}
-    {% endblock %}
-  </div>
-  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+  <main>
+    <div class="container">
+      {% block content %}
+      {% endblock %}
+    </div>
+  </main>
+  <script src="{{url_for('static', filename='index.js')}}"></script>
 </body>
 </html>
