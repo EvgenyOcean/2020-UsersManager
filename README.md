@@ -1,7 +1,7 @@
-#  User manager (Flask + REST APIs)
+#  User manager (Flask REST APIs App)
 This apps allows you to perform CRUD operations on users stored in JSON file.
 
-### Technologies uesd: 
+### Technologies used: 
 <hr />
 
 1. Flask 
