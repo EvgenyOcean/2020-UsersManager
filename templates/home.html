@@ -22,71 +22,24 @@
 
 
 <!-- USERS LIST -->
-<!-- <table class="table table-striped mt-4">
+<table class="table table-striped mt-4">
   <thead>
     <tr>
-      <th scope="col">#</th>
-      <th scope="col">First</th>
-      <th scope="col">Last</th>
-      <th scope="col">Handle</th>
+      <th scope="col">Id</th>
+      <th scope="col">Username</th>
+      <th scope="col">First Name</th>
+      <th scope="col">Last Name</th>
+      <th scope="col">Delete</th>
     </tr>
   </thead>
   <tbody>
-    <tr>
-      <th scope="row">1</th>
-      <td>Mark</td>
-      <td>Otto</td>
-      <td>@mdo</td>
-    </tr>
-    <tr>
-      <th scope="row">2</th>
-      <td>Jacob</td>
-      <td>Thornton</td>
-      <td>@fat</td>
-    </tr>
-    <tr>
-      <th scope="row">3</th>
-      <td>Larry</td>
-      <td>the Bird</td>
-      <td>@twitter</td>
-    </tr>
   </tbody>
-</table> -->
+</table>
 
 
 <script>
   let formElement = document.querySelector('#user-creation-form');
   formElement.onsubmit = createUser;
-  function createUser(e){
-    e.preventDefault();
-    let form = new FormData(formElement);
-    let username = form.get('username');
-    let firstName = form.get('firstName');
-    let lastName = form.get('lastName');
-    fetch('/api/create/', {
-    method: "POST",
-    headers: {
-      'HTTP_X_REQUESTED_WITH': 'XMLHttpRequest',
-      'X-Requested-With': 'XMLHttpRequest',
-      "Content-Type": "application/json",
-    }, 
-    body: JSON.stringify({username, firstName, lastName}),
-  }).then(response => {
-      if (response.ok){ 
-        response.json().then(data => {
-          if (data.message === 'Success'){
-            formElement.reset();
-            return notifier({'message': "User was created! Hooray!"})
-          } else {
-            return notifier(data);
-          }
-        }).catch(err => {console.log(err)})
-      } else {
-        response.json().then(errData => { 
-          console.log(errData);
-        }).catch(err => {console.log(err)})
-      }
-    }).catch(err => {console.log('never here, but just in case!')});
-  }
+  getUsers();
 </script>
 {% endblock %}

@@ -17,12 +17,12 @@
       </div>
     </div>
   </nav>
+  <script src="{{url_for('static', filename='index.js')}}"></script>
   <main>
     <div class="container">
       {% block content %}
       {% endblock %}
     </div>
   </main>
-  <script src="{{url_for('static', filename='index.js')}}"></script>
 </body>
 </html>

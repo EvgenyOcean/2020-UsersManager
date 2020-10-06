@@ -57,14 +57,28 @@ def create_user():
         return jsonify({"message": "Wrong content-type"})
 
 # Getting all the users
-@app.route('/api/users', methods=['GET'])
+@app.route('/api/users/', methods=['GET'])
 def get_users_list():
-    pass
+    database = UserHandler()
+    users = database.get_users()
+    return jsonify(users)
 
 # Deleting user by an id
-@app.route('/api/delete', methods=['DELETE'])
+@app.route('/api/delete/', methods=['DELETE'])
 def delete_user():
-    pass
+    if request.is_json:
+        try:
+            user_id = int(request.get_json()['id'])
+        except (KeyError, ValueError): 
+            return jsonify({"message": "numeric ID is required"})
+        
+        database = UserHandler()
+        result = database.delete_user(user_id)
+
+        return jsonify({"message": result})
+
+    else:
+        return jsonify({"message": "Wrong content-type"})
 
 # Getting user by an id
 @app.route('/api/user', methods=['GET'])

@@ -37,7 +37,7 @@ class UserHandler:
         data = self.read_json()
         data[0] = [user for user in data[0] if user['id'] != id]
         self.write_json(data)
-        return 'User with specified id has been deleted'
+        return 'Success'
 
     def change_user(self, id, new_user):
         data = self.read_json()
@@ -55,3 +55,7 @@ class UserHandler:
             return user
         except StopIteration: 
             return 'User with such id does not exist'
+
+    def get_users(self):
+        data = self.read_json()
+        return data[0]
