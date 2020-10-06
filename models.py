@@ -16,7 +16,7 @@ class UserHandler:
             try:
                 return json.load(file_in)
             except json.decoder.JSONDecodeError:
-                return [[], {"next_id": 0}]
+                return [[], {"next_id": 1}]
 
     def add_user(self, new_user):
         data = self.read_json()
