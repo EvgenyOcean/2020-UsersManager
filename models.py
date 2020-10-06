@@ -33,7 +33,6 @@ class UserHandler:
         return 'Success'
 
     def delete_user(self, id):
-        # What if user does not exist
         data = self.read_json()
         data[0] = [user for user in data[0] if user['id'] != id]
         self.write_json(data)
@@ -41,10 +40,11 @@ class UserHandler:
 
     def update_user(self, id, new_user):
         data = self.read_json()
+        # validating username
         for user in data[0]:
             if user['username'] == new_user['username'] and user['id'] != new_user['id']:
                 return 'That username already exists' 
-
+        # updating data
         for user in data[0]:
             if user['id'] == id:
                 user['username'] = new_user['username']

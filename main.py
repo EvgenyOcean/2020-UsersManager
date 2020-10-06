@@ -61,6 +61,9 @@ def create_user():
         if type(validation_result) == str:
             return jsonify({"message": validation_result})
 
+        # so basically, what these two lines of code do: 
+        # 1. init db, using specified path, by default db is expected to be in the root folder
+        # 2. call specific method, depending on the operation to be performed
         database = UserHandler()
         result = database.add_user(validation_result)
         
